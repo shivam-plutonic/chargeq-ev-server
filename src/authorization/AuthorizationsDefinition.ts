@@ -148,6 +148,9 @@ export const AUTHORIZATION_DEFINITION: AuthorizationDefinition = {
         resource: Entity.TENANT, action: Action.UPDATE,
         attributes: ['id', 'name', 'email', 'logo', 'address']
       },
+      { resource: Entity.DASHBOARD, action: [Action.LIST],
+        attributes: []
+      },
       {
         resource: Entity.USER,
         action: [
@@ -2176,9 +2179,6 @@ export const AUTHORIZATION_DEFINITION: AuthorizationDefinition = {
           }
         }
       },
-      { resource: Entity.DASHBOARD, action: [Action.LIST],
-        attributes: []
-      },
       {
         resource: Entity.USER, action: Action.LIST,
         condition: {
@@ -3158,9 +3158,6 @@ export const AUTHORIZATION_DEFINITION: AuthorizationDefinition = {
           'lastChangedOn', 'eulaAcceptedOn', 'eulaAcceptedVersion', 'locale',
           'billingData.customerID', 'billingData.lastChangedOn'
         ],
-      },
-      { resource: Entity.DASHBOARD, action: [Action.LIST],
-        attributes: []
       },
       {
         resource: Entity.USER, action: Action.READ,
