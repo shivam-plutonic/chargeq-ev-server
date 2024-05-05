@@ -445,6 +445,9 @@ export const AUTHORIZATION_DEFINITION: AuthorizationDefinition = {
           }
         },
       },
+      { resource: Entity.DASHBOARD, action: [Action.LIST],
+        attributes: []
+      },
       {
         resource: Entity.CHARGING_STATION, action: Action.LIST,
         attributes: [
