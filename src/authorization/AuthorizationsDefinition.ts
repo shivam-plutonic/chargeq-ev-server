@@ -25,6 +25,9 @@ export const AUTHORIZATION_DEFINITION: AuthorizationDefinition = {
           }
         },
       },
+      { resource: Entity.DASHBOARD, action: [Action.LIST],
+        attributes: []
+      },
       { resource: Entity.CHARGING_STATION_TEMPLATE, action: [Action.LIST],
         attributes: [
           'id', 'createdOn', 'createdBy.name', 'createdBy.firstName', 'lastChangedOn', 'lastChangedBy.name', 'lastChangedBy.firstName',
