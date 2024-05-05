@@ -25,9 +25,6 @@ export const AUTHORIZATION_DEFINITION: AuthorizationDefinition = {
           }
         },
       },
-      { resource: Entity.DASHBOARD, action: [Action.LIST],
-        attributes: []
-      },
       { resource: Entity.CHARGING_STATION_TEMPLATE, action: [Action.LIST],
         attributes: [
           'id', 'createdOn', 'createdBy.name', 'createdBy.firstName', 'lastChangedOn', 'lastChangedBy.name', 'lastChangedBy.firstName',
@@ -444,9 +441,6 @@ export const AUTHORIZATION_DEFINITION: AuthorizationDefinition = {
             filters: ['LocalIssuer']
           }
         },
-      },
-      { resource: Entity.DASHBOARD, action: [Action.LIST],
-        attributes: []
       },
       {
         resource: Entity.CHARGING_STATION, action: Action.LIST,
@@ -2182,6 +2176,9 @@ export const AUTHORIZATION_DEFINITION: AuthorizationDefinition = {
           }
         }
       },
+      { resource: Entity.DASHBOARD, action: [Action.LIST],
+        attributes: []
+      },
       {
         resource: Entity.USER, action: Action.LIST,
         condition: {
@@ -3161,6 +3158,9 @@ export const AUTHORIZATION_DEFINITION: AuthorizationDefinition = {
           'lastChangedOn', 'eulaAcceptedOn', 'eulaAcceptedVersion', 'locale',
           'billingData.customerID', 'billingData.lastChangedOn'
         ],
+      },
+      { resource: Entity.DASHBOARD, action: [Action.LIST],
+        attributes: []
       },
       {
         resource: Entity.USER, action: Action.READ,
