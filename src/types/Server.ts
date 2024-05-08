@@ -80,6 +80,7 @@ export enum ServerAction {
   LOG = 'Log',
   LOGS_EXPORT = 'LogsExport',
 
+  DASHBOARD = 'Dashboard',
   CHARGING_STATIONS = 'ChargingStations',
 
   CAR_CATALOGS = 'CarCatalogs',
@@ -515,6 +516,7 @@ export enum RESTServerRoute {
   REST_CHARGING_STATION_TEMPLATES = 'charging-station-templates',
   REST_CHARGING_STATION_TEMPLATE = 'charging-station-templates/:id',
 
+  REST_DASHBOARD = 'dashboard',
   REST_CHARGING_STATIONS = 'charging-stations',
   REST_CHARGING_STATION = 'charging-stations/:id',
 
