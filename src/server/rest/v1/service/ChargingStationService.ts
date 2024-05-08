@@ -77,9 +77,11 @@ import OCPPUtils from '../../../ocpp/utils/OCPPUtils';
 import OICPUtils from '../../../oicp/OICPUtils';
 import ChargingStationValidatorRest from '../validator/ChargingStationValidatorRest';
 import TagValidatorRest from '../validator/TagValidatorRest';
+import TransactionValidatorRest from '../validator/TransactionValidatorRest';
 import UserValidatorRest from '../validator/UserValidatorRest';
 import AuthorizationService from './AuthorizationService';
 import TagService from './TagService';
+import TransactionService from './TransactionService';
 import UserService from './UserService';
 import UtilsService from './UtilsService';
 
@@ -541,7 +543,21 @@ export default class ChargingStationService {
       Active: false
     });
     const inactiveRfid = await TagService.getTags(req, inactiveRfidRequest);
+    // Get transaction
+    const txnFilterRequest = TransactionValidatorRest.getInstance().validateTransactionsGetReq({
+      Status: TransactionStatus.COMPLETED,
+      Issuer: true,
+      WithSite: true,
+      WithSiteArea: true,
+      WithCompany: true,
+      WithUser: true,
+      Statistics: 'history',
+      Limit: 5,
+      SortFields: '-timestamp'
+    });
+    const transactions = await TransactionService.getTransactions(req, txnFilterRequest, Action.GET_COMPLETED_TRANSACTION);
     res.json({
+      sessions: transactions,
       active_rfid: activeRfid.count,
       inactive_rfid: inactiveRfid.count,
       pending_users: pendingUser.count,
