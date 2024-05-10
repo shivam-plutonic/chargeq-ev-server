@@ -566,10 +566,10 @@ export default class ChargingStationService {
       Limit: 5,
       SortFields: '-timestamp'
     });
-    const transactions = await TransactionService.getTransactions(req, txnFilterRequest, Action.GET_COMPLETED_TRANSACTION);
+    const transactions = await TransactionService.getTransactions(req, txnFilterRequest, Action.GET_ACTIVE_TRANSACTION);
     const completed_transactions = await TransactionService.getTransactions(req, txnCompleteFilterRequest, Action.GET_COMPLETED_TRANSACTION);
     res.json({
-      completed_transactions:completed_transactions.count,
+      completed_transactions:completed_transactions,
       sessions: transactions,
       active_rfid: activeRfid.count,
       inactive_rfid: inactiveRfid.count,
