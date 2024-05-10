@@ -563,7 +563,7 @@ export default class ChargingStationService {
       WithCompany: true,
       WithUser: true,
       Statistics: 'history',
-      Limit: 5,
+      Limit: 1,
       SortFields: '-timestamp'
     });
     const transactions = await TransactionService.getTransactions(req, txnFilterRequest, Action.GET_ACTIVE_TRANSACTION);
