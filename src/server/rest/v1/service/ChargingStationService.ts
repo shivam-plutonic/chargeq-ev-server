@@ -545,6 +545,17 @@ export default class ChargingStationService {
     const inactiveRfid = await TagService.getTags(req, inactiveRfidRequest);
     // Get transaction
     const txnFilterRequest = TransactionValidatorRest.getInstance().validateTransactionsGetReq({
+      Status: TransactionStatus.ACTIVE,
+      Issuer: true,
+      WithSite: true,
+      WithSiteArea: true,
+      WithCompany: true,
+      WithUser: true,
+      Statistics: 'history',
+      Limit: 5,
+      SortFields: '-timestamp'
+    });
+    const txnCompleteFilterRequest = TransactionValidatorRest.getInstance().validateTransactionsGetReq({
       Status: TransactionStatus.COMPLETED,
       Issuer: true,
       WithSite: true,
@@ -556,7 +567,9 @@ export default class ChargingStationService {
       SortFields: '-timestamp'
     });
     const transactions = await TransactionService.getTransactions(req, txnFilterRequest, Action.GET_COMPLETED_TRANSACTION);
+    const completed_transactions = await TransactionService.getTransactions(req, txnCompleteFilterRequest, Action.GET_COMPLETED_TRANSACTION);
     res.json({
+      completed_transactions:completed_transactions.count,
       sessions: transactions,
       active_rfid: activeRfid.count,
       inactive_rfid: inactiveRfid.count,
