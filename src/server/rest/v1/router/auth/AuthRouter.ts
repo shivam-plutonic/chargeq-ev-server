@@ -22,6 +22,7 @@ export default class AuthRouter {
     this.buildRouteEndUserLicenseAgreementHtml();
     this.buildRouteEndUserLicenseAgreementCheck();
     this.buildLogInWithOtp();
+    this.buildVerifyOtp();
     return this.router;
   }
 
@@ -78,9 +79,16 @@ export default class AuthRouter {
       void RouterUtils.handleRestServerAction(AuthService.handleCheckEndUserLicenseAgreement.bind(this), ServerAction.CHECK_END_USER_LICENSE_AGREEMENT, req, res, next);
     });
   }
+
   protected buildLogInWithOtp(): void {
     this.router.post(`/${RESTServerRoute.REST_SIGNIN_OTP}`, (req: Request, res: Response, next: NextFunction) => {
       void RouterUtils.handleRestServerAction(AuthService.handleLogInWithOtp.bind(this), ServerAction.LOGINOTP, req, res, next);
+    });
+  }
+
+  protected buildVerifyOtp(): void {
+    this.router.post(`/${RESTServerRoute.REST_VERIFY_OTP}`, (req: Request, res: Response, next: NextFunction) => {
+      void RouterUtils.handleRestServerAction(AuthService.handleVerifyOtp.bind(this), ServerAction.VERIFYOTP, req, res, next);
     });
   }
 }
