@@ -1,0 +1,17 @@
+{
+  "$id": "walletrecharge-initiate",
+  "title": "wallet recharge initiate",
+  "type": "object",
+  "properties": {
+    "userID": {
+      "$ref": "wallet#/definitions/userID"
+    },
+    "amount": {
+      "$ref": "wallet#/definitions/amount"
+    }
+  },
+  "required": [
+    "userID",
+    "amount"
+  ]
+}

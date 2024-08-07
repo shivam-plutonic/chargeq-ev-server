@@ -1,0 +1,22 @@
+{
+  "$id": "walletrecharge-get-transaction",
+  "title": "wallet get transaction",
+  "type": "object",
+  "properties": {
+    "userID": {
+      "type": "string",
+      "sanitize": "mongo"
+    },
+    "startDate": {
+      "type": "string",
+      "sanitize": "mongo"
+    },
+    "endDate": {
+      "type": "string",
+      "sanitize": "mongo"
+    }
+  },
+  "required": [
+    "userID"
+  ]
+}

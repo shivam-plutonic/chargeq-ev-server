@@ -1,0 +1,19 @@
+{
+  "$id": "walletrecharge-update",
+  "title": "wallet recharge update",
+  "type": "object",
+  "properties": {
+    "userId": {
+      "type": "string",
+      "sanitize": "mongo"
+    },
+    "orderId": {
+      "type": "string",
+      "sanitize": "mongo"
+    }
+  },
+  "required": [
+    "userId",
+    "orderId"
+  ]
+}

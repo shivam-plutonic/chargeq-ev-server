@@ -1,0 +1,17 @@
+{
+  "$id": "wallet",
+  "definitions": {
+    "userID": {
+      "type": "string",
+      "sanitize": "mongo"
+    },
+    "walletBalance": {
+      "type": "number",
+      "sanitize": "mongo"
+    },
+    "amount": {
+      "type": "number",
+      "sanitize": "mongo"
+    }
+  }
+}

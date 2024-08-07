@@ -7,7 +7,7 @@ src/assets/config_*.json
 manifest.yml
 test/results
 test/results-eslint
-
+.env
 # Logs
 logs
 *.log
