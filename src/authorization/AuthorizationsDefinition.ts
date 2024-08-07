@@ -149,6 +149,10 @@ export const AUTHORIZATION_DEFINITION: AuthorizationDefinition = {
         attributes: ['id', 'name', 'email', 'logo', 'address']
       },
       {
+        resource: Entity.DASHBOARD, action: [Action.LIST],
+        attributes: []
+      },
+      {
         resource: Entity.USER,
         action: [
           Action.LIST, Action.EXPORT, Action.IMPORT
@@ -1061,6 +1065,11 @@ export const AUTHORIZATION_DEFINITION: AuthorizationDefinition = {
   },
   basic: {
     grants: [
+      {
+        resource: Entity.WALLET,
+        action: Action.READ,
+        attributes: ['amount']
+      },
       {
         resource: Entity.USER, action: Action.READ,
         condition: {

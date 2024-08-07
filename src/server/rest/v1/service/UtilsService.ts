@@ -56,6 +56,7 @@ import UserToken from '../../../../types/UserToken';
 import Utils from '../../../../utils/Utils';
 import _ from 'lodash';
 import moment from 'moment';
+import axios from 'axios';
 
 const MODULE_NAME = 'UtilsService';
 
@@ -109,6 +110,32 @@ export default class UtilsService {
       module: MODULE_NAME, action, method,
       message: `The Captcha score is ${response.data.score as string} (score limit is ${centralSystemRestConfig.captchaScore})`,
     });
+  }
+
+  // ayush change
+  // eslint-disable-next-line @typescript-eslint/require-await
+  public static generateOtp() {
+    return '123456';
+    // return Math.floor(100000 + Math.random() * 900000).toString();
+  }
+
+  public static async sendOtp(mobileNumber, otp) {
+    const apiUrl = 'https://www.smsalert.co.in/api/push.json';
+    const params = {
+      apikey: '66a9399448669',
+      sender: 'VIEWIT',
+      mobileno: mobileNumber,
+      text: `Your OTP is ${otp}`
+    };
+
+    try {
+      const response = await axios.post(apiUrl, null, { params });
+      console.log(`OTP sent to ${mobileNumber}: ${response.data}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error sending OTP:', error);
+      throw error;
+    }
   }
 
   public static async checkAndGetChargingStationAuthorization(tenant: Tenant, userToken: UserToken, chargingStationID: string, authAction: Action,

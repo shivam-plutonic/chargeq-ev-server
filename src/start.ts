@@ -33,6 +33,8 @@ import StorageConfiguration from './types/configuration/StorageConfiguration';
 import TenantStorage from './storage/mongodb/TenantStorage';
 import Utils from './utils/Utils';
 import global from './types/GlobalType';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const MODULE_NAME = 'Bootstrap';
 

@@ -1,0 +1,14 @@
+{
+  "$id": "walletrecharge-get-balance",
+  "title": "wallet get balance",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "sanitize": "mongo"
+    }
+  },
+  "required": [
+    "id"
+  ]
+}

@@ -691,7 +691,7 @@ export default class TransactionService {
           user: loggedUser,
           action, module: MODULE_NAME, method: 'handleDeleteTransactions',
           message: `Transaction ID '${transaction.id}' has been refunded and cannot be deleted`,
-          detailedMessages: { transaction }
+          detailedMessages: { transactionData: LoggingHelper.shrinkTransactionProperties(transaction) }
         });
         continue;
       }
@@ -704,7 +704,7 @@ export default class TransactionService {
           user: loggedUser,
           action, module: MODULE_NAME, method: 'handleDeleteTransactions',
           message: `Transaction ID '${transaction.id}' has been billed and cannot be deleted`,
-          detailedMessages: { transaction }
+          detailedMessages: { transactionData: LoggingHelper.shrinkTransactionProperties(transaction) }
         });
         continue;
       }
@@ -740,8 +740,8 @@ export default class TransactionService {
     return result;
   }
 
-  private static async getTransactions(req: Request, filteredRequest: HttpTransactionsGetRequest,
-      authAction: Action = Action.LIST, additionalFilters: Record<string, any> = {}): Promise<DataResult<Transaction>> {
+  static async getTransactions(req: Request, filteredRequest: HttpTransactionsGetRequest,
+                               authAction: Action = Action.LIST, additionalFilters: Record<string, any> = {}): Promise<DataResult<Transaction>> {
     // Get authorization filters
     const authorizations = await AuthorizationService.checkAndGetTransactionsAuthorizations(
       req.tenant, req.user, authAction, filteredRequest, false);
@@ -839,7 +839,7 @@ export default class TransactionService {
           user: req.user, actionOnUser: transaction.userID,
           module: MODULE_NAME, method: 'transactionSoftStop',
           message: `${Utils.buildConnectorInfo(transaction.connectorId, transaction.id)} Transaction has been soft stopped successfully`,
-          action, detailedMessages: { transaction }
+          action, detailedMessages: { transactionData: LoggingHelper.shrinkTransactionProperties(transaction) }
         });
       } catch (error) {
         throw new AppError({

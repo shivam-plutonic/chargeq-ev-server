@@ -1,11 +1,13 @@
 import Address from './Address';
 import CreatedUpdatedProps from './CreatedUpdatedProps';
+// import  Wallet from './Wallet';
 
 export default interface Tenant extends CreatedUpdatedProps {
   id: string;
   name: string;
   email: string;
   subdomain: string;
+  // wallet :Wallet;
   address: Address;
   logo: string;
   components: TenantComponent;
@@ -16,6 +18,7 @@ export default interface Tenant extends CreatedUpdatedProps {
 }
 
 export interface TenantComponent {
+  wallet?: TenantComponentContent;
   ocpi?: TenantComponentContent;
   oicp?: TenantComponentContent;
   organization?: TenantComponentContent;
@@ -42,6 +45,7 @@ export interface TenantLogo {
 }
 
 export enum TenantComponents {
+  WALLET ='wallet',
   OCPI = 'ocpi',
   OICP = 'oicp',
   REFUND = 'refund',

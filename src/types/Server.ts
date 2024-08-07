@@ -2,6 +2,14 @@
 export enum ServerAction {
   UNKNOWN_ACTION = 'Unknown',
 
+  WALLET_RECHARGE = 'walletRecharge',
+  WALLET_WITHDRAW = 'walletWithdraw',
+  WALLET_BALANCE = 'walletBalance',
+  WALLET_TRANSACTION = 'walletTransaction',
+  TRANSACTION_STATUS = 'transactionStatus',
+
+
+
   SAP_CONCUR_REQUEST = 'SapConcurRequest',
   RECAPTCHA_REQUEST = 'RecaptchaRequest',
   GREENCOM_REQUEST = 'GreencomRequest',
@@ -15,6 +23,8 @@ export enum ServerAction {
   DEPRECATED_REST_ENDPOINT = 'DeprecatedRestEndpoint',
   LOGIN = 'Login',
   LOGOUT = 'Logout',
+  LOGINOTP ='Loginotp',
+  VERIFYOTP ='Verifyotp',
   PASSWORD_RESET = 'PasswordReset',
   PING = 'Ping',
   CHECK_CONNECTION = 'CheckConnection',
@@ -80,6 +90,7 @@ export enum ServerAction {
   LOG = 'Log',
   LOGS_EXPORT = 'LogsExport',
 
+  DASHBOARD = 'Dashboard',
   CHARGING_STATIONS = 'ChargingStations',
 
   CAR_CATALOGS = 'CarCatalogs',
@@ -286,6 +297,7 @@ export enum ServerAction {
   CHARGING_STATION_REGISTERED = 'ChargingStationRegistered',
   END_OF_CHARGE = 'EndOfCharge',
   OPTIMAL_CHARGE_REACHED = 'OptimalChargeReached',
+  SESSION_STARTED = 'SessionStarted',
   END_OF_SESSION = 'EndOfSession',
   REQUEST_PASSWORD = 'RequestPassword',
   USER_ACCOUNT_STATUS_CHANGED = 'UserAccountStatusChanged',
@@ -503,6 +515,8 @@ export enum ServerAction {
 export enum RESTServerRoute {
   REST_SIGNIN = 'signin',
   REST_SIGNON = 'signon',
+  REST_SIGNIN_OTP = 'signinotp',
+  REST_VERIFY_OTP = 'verifyotp',
   REST_SIGNOUT = 'signout',
   REST_PASSWORD_RESET = 'password/reset',
   REST_END_USER_LICENSE_AGREEMENT = 'eula',
@@ -511,9 +525,17 @@ export enum RESTServerRoute {
   REST_MAIL_CHECK = 'mail/check',
   REST_MAIL_RESEND = 'mail/resend',
 
+  // wallet
+  WALLET_RECHARGE = 'wallet-recharge',
+  WALLET_WITHDRAW = 'wallet-withdraw',
+  WALLET_BALANCE = 'wallet-balance',
+  WALLET_TRANSACTION = 'wallet-transaction',
+  TRANSACTION_STATUS = 'transaction-status',
+
   REST_CHARGING_STATION_TEMPLATES = 'charging-station-templates',
   REST_CHARGING_STATION_TEMPLATE = 'charging-station-templates/:id',
 
+  REST_DASHBOARD = 'dashboard',
   REST_CHARGING_STATIONS = 'charging-stations',
   REST_CHARGING_STATION = 'charging-stations/:id',
 
