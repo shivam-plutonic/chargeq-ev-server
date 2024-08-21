@@ -238,6 +238,9 @@ export default class OCPPService {
         transaction.numberOfMeterValues >= 1) {
         transaction.phasesUsed = Utils.getUsedPhasesInTransactionInProgress(chargingStation, transaction);
       }
+      if (transaction.price > 60) {
+        await this.softStopTransaction(tenant, transaction, chargingStation, chargingStation.siteArea);
+      }
       // OCPI
       await OCPIFacade.processUpdateTransaction(tenant, transaction, chargingStation, chargingStation.siteArea, transaction.user, ServerAction.OCPP_METER_VALUES);
       // OICP
