@@ -238,6 +238,23 @@ export default class OCPPService {
         transaction.numberOfMeterValues >= 1) {
         transaction.phasesUsed = Utils.getUsedPhasesInTransactionInProgress(chargingStation, transaction);
       }
+      if (transaction.currentCumulatedPrice > transaction.user.wallet.amount) {
+        await this.softStopTransaction(tenant, transaction, chargingStation, chargingStation.siteArea);
+        // transaction.remotestop = {
+        //   timestamp: new Date(),
+        //   tagID: transaction.tag.id,
+        //   userID: transaction.user.id
+        // };
+        //
+        // const chargingStationClient = await ChargingStationClientFactory.getChargingStationClient(tenant, chargingStation);
+        // // Save Transaction
+        // await TransactionStorage.saveTransaction(tenant, transaction);
+        // // Ok: Execute it
+        // return chargingStationClient.remoteStopTransaction({
+        //   transactionId: transaction.id
+        // });
+        return;
+      }
       // OCPI
       await OCPIFacade.processUpdateTransaction(tenant, transaction, chargingStation, chargingStation.siteArea, transaction.user, ServerAction.OCPP_METER_VALUES);
       // OICP
