@@ -32,6 +32,8 @@ export default class WalletService {
     const id = filteredRequest.userID as string;
     const amount = filteredRequest.amount as number;
     const orderId = 'ORID665456' + Date.now();
+    console.log(req.tenant, 'tenant');
+    const tenantName = req.tenant.name;
     const user = await UserStorage.getUser(req.tenant, id);
     void WalletStorage.updateNewTransaction(req.tenant, orderId, user.mobile , amount, 'INITIATED');
 
@@ -45,6 +47,7 @@ export default class WalletService {
     //   });
     //
     // }
+
 
     try {
       const options = {
@@ -65,7 +68,7 @@ export default class WalletService {
             customer_name: user.firstName,
           },
           order_meta: {
-            return_url: 'http://localhost:45000/users/wallet#balance/{order_id}',
+            return_url: `https://${tenantName}.chargeq.energy/users/wallet#balance/{order_id}`,
           },
           order_amount: amount,
           order_id: orderId,
@@ -105,7 +108,7 @@ export default class WalletService {
     const id = filteredRequest.userId as string;
     const user = await UserStorage.getUser(req.tenant, id);
     const mobile = user.mobile;
-    let url = `https://www.cashfree.com/pg/orders/${orderId}`;
+    let url = `https://sandbox.cashfree.com/pg/orders/${orderId}`;
     if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test') {
       url = `https://sandbox.cashfree.com/pg/orders/${orderId}`;
     }
