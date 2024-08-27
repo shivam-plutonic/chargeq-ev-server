@@ -195,7 +195,7 @@ export default class WalletStorage {
       { $set: { 'wallet.amount': user.wallet.amount } }
     );
 
-    await WalletTransactionStorage.recordTransaction(tenant,orderId , user.id, 'debit', adjustedAmount, 'SUCCESS');
+    await WalletTransactionStorage.recordTransaction(tenant,orderId , user.id, 'debit', Amount, 'SUCCESS');
 
     // console.log(user.wallet.amount);
     // await UserStorage.saveUserWalletAmount(tenant, user.id, rechargeAmount);

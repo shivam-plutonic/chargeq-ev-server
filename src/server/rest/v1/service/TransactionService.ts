@@ -295,7 +295,7 @@ export default class TransactionService {
       // OCPP Remote Stop
       if (!chargingStation.inactive && connector.currentTransactionID === transaction.id) {
         await ChargingStationService.handleOcppAction(ServerAction.CHARGING_STATION_REMOTE_STOP_TRANSACTION, req, res, next);
-        await WalletStorage.updateWalletBalanceWithdraw(req.tenant,req.user.mobile,transaction.currentCumulatedPrice);
+      //  await WalletStorage.updateWalletBalanceWithdraw(req.tenant,req.user.mobile,transaction.currentCumulatedPrice);
       // Transaction Soft Stop
       } else {
         await TransactionService.transactionSoftStop(ServerAction.TRANSACTION_SOFT_STOP,
