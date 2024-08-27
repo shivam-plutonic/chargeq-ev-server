@@ -251,7 +251,7 @@ export default class AuthService {
     newUser.mobile = filteredRequest.mobile;
     newUser.createdOn = new Date();
     // newUser.address.address1 = 'delhi';
-    newUser.wallet.amount = 0;
+    newUser.wallet.amount = 10;
 
     // newUser.wallet.walletBalance = 50;
     // newUser.wallet.id = '123';
