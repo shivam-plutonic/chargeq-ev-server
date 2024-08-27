@@ -1,3 +1,4 @@
+import WalletStorage from '../../../storage/mongodb/WalletStorage';
 import { AsyncTaskType, AsyncTasks } from '../../../types/AsyncTask';
 import { ChargePointErrorCode, ChargePointStatus, OCPPAttribute, OCPPAuthorizationStatus, OCPPAuthorizeRequestExtended, OCPPAuthorizeResponse, OCPPBootNotificationRequestExtended, OCPPBootNotificationResponse, OCPPDataTransferRequestExtended, OCPPDataTransferResponse, OCPPDataTransferStatus, OCPPDiagnosticsStatusNotificationRequestExtended, OCPPDiagnosticsStatusNotificationResponse, OCPPFirmwareStatusNotificationRequestExtended, OCPPFirmwareStatusNotificationResponse, OCPPHeartbeatRequestExtended, OCPPHeartbeatResponse, OCPPLocation, OCPPMeasurand, OCPPMeterValue, OCPPMeterValuesRequest, OCPPMeterValuesRequestExtended, OCPPMeterValuesResponse, OCPPNormalizedMeterValue, OCPPNormalizedMeterValues, OCPPPhase, OCPPProtocol, OCPPReadingContext, OCPPSampledValue, OCPPStartTransactionRequestExtended, OCPPStartTransactionResponse, OCPPStatusNotificationRequestExtended, OCPPStatusNotificationResponse, OCPPStopTransactionRequestExtended, OCPPStopTransactionResponse, OCPPUnitOfMeasure, OCPPValueFormat, OCPPVersion, RegistrationStatus } from '../../../types/ocpp/OCPPServer';
 import { ChargingProfilePurposeType, ChargingRateUnitType } from '../../../types/ChargingProfile';
@@ -503,6 +504,7 @@ export default class OCPPService {
       }
       // Get Transaction
       const transaction = await this.getTransactionFromStopTransaction(tenant, chargingStation, headers, stopTransaction);
+      await WalletStorage.updateWalletBalanceWithdraw(tenant,transaction.user.mobile,transaction.currentCumulatedPrice);
       // Get Tag ID that stopped the Transaction
       const tagID = this.getStopTransactionTagId(stopTransaction, transaction);
       // Transaction is stopped by central system?
