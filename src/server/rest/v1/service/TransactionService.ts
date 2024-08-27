@@ -1,3 +1,4 @@
+import WalletStorage from '../../../../storage/mongodb/WalletStorage';
 import { Action, Entity } from '../../../../types/Authorization';
 import ChargingStation, { Connector } from '../../../../types/ChargingStation';
 import { HTTPAuthError, HTTPError } from '../../../../types/HTTPError';
@@ -42,6 +43,7 @@ import UserToken from '../../../../types/UserToken';
 import Utils from '../../../../utils/Utils';
 import UtilsService from './UtilsService';
 import moment from 'moment-timezone';
+import WalletService from './WalletService';
 
 const MODULE_NAME = 'TransactionService';
 
@@ -288,6 +290,7 @@ export default class TransactionService {
       await TransactionService.checkAndGetTransactionChargingStationConnector(action, req.tenant, req.user, transactionID, Action.REMOTE_STOP_TRANSACTION);
     req.body.chargingStationID = transaction.chargeBoxID;
     req.body.args = { transactionId: transaction.id };
+    await WalletStorage.updateWalletBalanceWithdraw(req.tenant,req.user.mobile,transaction.currentCumulatedPrice);
     // Handle the routing
     if (chargingStation.issuer) {
       // OCPP Remote Stop

@@ -163,9 +163,10 @@ export default class WalletStorage {
     return user.wallet.amount;
   }
 
-  public static async updateWalletBalanceWithdraw(tenant: Tenant, mobile: string, Amount: number): Promise<number> {
+  public static async updateWalletBalanceWithdraw(tenant: Tenant, mobile: string, Amount: number): Promise<void> {
     const startTime = Logging.traceDatabaseRequestStart();
     DatabaseUtils.checkTenantObject(tenant);
+    const orderId = 'ORID665456' + Date.now();
 
 
     const user = await WalletStorage.getWalletByMobile(tenant, mobile);
@@ -177,22 +178,24 @@ export default class WalletStorage {
       });
     }
 
-    if (user.wallet.amount < Amount) {
-      throw new BackendError({
-        module: MODULE_NAME,
-        method: 'updateWalletBalanceWithdraw',
-        message: 'Wallet does not have enough amount to pay'
-      });
-    }
+    // if (user.wallet.amount < Amount) {
+    //   throw new BackendError({
+    //     module: MODULE_NAME,
+    //     method: 'updateWalletBalanceWithdraw',
+    //     message: 'Wallet does not have enough amount to pay'
+    //   });
+    // }
+
     const gstRate = 0.18;
     let adjustedAmount = Amount / (1 + gstRate);
     adjustedAmount = Math.round(adjustedAmount);
-    user.wallet.amount -= adjustedAmount;
+    user.wallet.amount -= Amount;
     await global.database.getCollection<any>(tenant.id, 'users').findOneAndUpdate(
       { '_id': DatabaseUtils.convertToObjectID(user.id) },
       { $set: { 'wallet.amount': user.wallet.amount } }
     );
-    // await WalletTransactionStorage.recordTransaction(tenant, user.id, 'debit', adjustedAmount, 'Wallet withdrawal');
+
+    await WalletTransactionStorage.recordTransaction(tenant,orderId , user.id, 'debit', adjustedAmount, 'SUCCESS');
 
     // console.log(user.wallet.amount);
     // await UserStorage.saveUserWalletAmount(tenant, user.id, rechargeAmount);
@@ -203,7 +206,7 @@ export default class WalletStorage {
     // );
 
     await Logging.traceDatabaseRequestEnd(tenant, MODULE_NAME, 'updateWalletBalanceWithdraw', startTime, { Amount });
-    return user.wallet.amount;
+    // return user.wallet.amount;
   }
 
   // public static async createWallet(tenant: Tenant, userID: string, initialBalance: number = 0): Promise<string> {

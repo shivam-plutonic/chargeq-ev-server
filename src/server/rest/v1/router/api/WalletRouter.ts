@@ -76,6 +76,4 @@ export default class WalletRouter {
   //     void RouterUtils.handleRestServerAction(WalletService.handleWalletBalance.bind(this), ServerAction.WALLET_BALANCE, req, res, next);
   //   });
   // }
-
-  // Add more wallet routes like withdrawal, transaction history, etc., as needed
 }
