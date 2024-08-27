@@ -33,7 +33,7 @@ export default class WalletService {
     const amount = filteredRequest.amount as number;
     const orderId = 'ORID665456' + Date.now();
     console.log(req.tenant, 'tenant');
-    const tenantName = req.tenant.name;
+    const tenantName = req.tenant.subdomain;
     const user = await UserStorage.getUser(req.tenant, id);
     void WalletStorage.updateNewTransaction(req.tenant, orderId, user.mobile , amount, 'INITIATED');
 
@@ -47,8 +47,6 @@ export default class WalletService {
     //   });
     //
     // }
-
-
     try {
       const options = {
         method: 'post',
@@ -84,13 +82,12 @@ export default class WalletService {
         message: 'Wallet recharge order created successfully',
         action: action,
       });
-
       axios.request(options).then(function(response) {
         // res.json({ response });
         res.json(response.data.payment_session_id);
       })
         .catch(function(error) {
-          console.error(error);
+          // console.error(error);
         });
     } catch (error) {
       res.status(500).send({
