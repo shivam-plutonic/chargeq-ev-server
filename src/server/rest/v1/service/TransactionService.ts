@@ -290,12 +290,12 @@ export default class TransactionService {
       await TransactionService.checkAndGetTransactionChargingStationConnector(action, req.tenant, req.user, transactionID, Action.REMOTE_STOP_TRANSACTION);
     req.body.chargingStationID = transaction.chargeBoxID;
     req.body.args = { transactionId: transaction.id };
-    await WalletStorage.updateWalletBalanceWithdraw(req.tenant,req.user.mobile,transaction.currentCumulatedPrice);
     // Handle the routing
     if (chargingStation.issuer) {
       // OCPP Remote Stop
       if (!chargingStation.inactive && connector.currentTransactionID === transaction.id) {
         await ChargingStationService.handleOcppAction(ServerAction.CHARGING_STATION_REMOTE_STOP_TRANSACTION, req, res, next);
+        await WalletStorage.updateWalletBalanceWithdraw(req.tenant,req.user.mobile,transaction.currentCumulatedPrice);
       // Transaction Soft Stop
       } else {
         await TransactionService.transactionSoftStop(ServerAction.TRANSACTION_SOFT_STOP,
@@ -834,6 +834,7 @@ export default class TransactionService {
       }
       // Stop Transaction
       try {
+        await WalletStorage.updateWalletBalanceWithdraw(req.tenant,req.user.mobile,transaction.currentCumulatedPrice);
         await new OCPPService(Configuration.getChargingStationConfig()).softStopTransaction(
           req.tenant, transaction, chargingStation, chargingStation.siteArea);
         await Logging.logInfo({
