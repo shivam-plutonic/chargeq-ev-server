@@ -190,13 +190,17 @@ export default class WalletStorage {
     let adjustedAmount = Amount / (1 + gstRate);
     adjustedAmount = Math.round(adjustedAmount);
     user.wallet.amount -= Amount;
+    console.log(Amount, 'amonu');
+	if( Amount ){
+
     await global.database.getCollection<any>(tenant.id, 'users').findOneAndUpdate(
       { '_id': DatabaseUtils.convertToObjectID(user.id) },
       { $set: { 'wallet.amount': user.wallet.amount } }
     );
+	
 
     await WalletTransactionStorage.recordTransaction(tenant,orderId , user.id, 'debit', Amount, 'SUCCESS');
-
+	}
     // console.log(user.wallet.amount);
     // await UserStorage.saveUserWalletAmount(tenant, user.id, rechargeAmount);
     // console.log(user.id, 'userID');

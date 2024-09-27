@@ -55,7 +55,7 @@ export default class WalletService {
         url: 'https://sandbox.cashfree.com/pg/orders',
         headers: {
           accept: 'application/json',
-          'x-api-version': ' 2025-01-01',
+          'x-api-version': ' 2023-08-01',
           'content-type': 'application/json',
           'x-client-id': process.env.CASHFREE_CLIENT_ID,
           'x-client-secret': process.env.CASHFREE_CLIENT_SECRET
@@ -69,10 +69,12 @@ export default class WalletService {
           },
           order_meta: {
             return_url: `https://${tenantName}.chargeq.energy/users/wallet#balance/{order_id}`,
-          },
+     	//     payment_methods: ['upi', 'card', 'netbanking'] 
+     	  },
           order_amount: amount,
           order_id: orderId,
           order_currency: 'INR',
+	//  payment_methods: ['UPI', 'CARD']
         }
       };
 
@@ -87,7 +89,7 @@ export default class WalletService {
 
       axios.request(options).then(function(response) {
         // res.json({ response });
-        res.json(response.data.payment_session_id);
+        res.json(response.data);
       })
         .catch(function(error) {
 	// console.error(error);
