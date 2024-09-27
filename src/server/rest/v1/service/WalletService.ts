@@ -1,33 +1,19 @@
-import path from 'path';
-import UserStorage from '../../../../storage/mongodb/UserStorage';
-import { Action, Entity } from '../../../../types/Authorization';
 import { NextFunction, Request, Response } from 'express';
-import global from '../../../../types/GlobalType';
-import Tenant, { TenantComponents } from '../../../../types/Tenant';
-import WalletValidatorRest from '../validator/WalletValidatorRest';
-import WalletStorage from '../../../../storage/mongodb/WalletStorage';
-
 import AppError from '../../../../exception/AppError';
-import AuthorizationService from './AuthorizationService';
-// import Authorizations from '../../../../authorization/Authorizations';
-// import Constants from '../../../../utils/Constants';
 import { HTTPError } from '../../../../types/HTTPError';
 import Logging from '../../../../utils/Logging';
-// import LoggingHelper from '../../../../utils/LoggingHelper';
 import { ServerAction } from '../../../../types/Server';
-// import { StatusCodes } from 'http-status-codes';
-// import Utils from '../../../../utils/Utils';
-import UtilsService from './UtilsService';
-// import { CFPaymentGateway } from 'cashfree-pg-sdk-nodejs';
-import { createCashfreeOrder } from './CreateCashFreeService';
+import UserStorage from '../../../../storage/mongodb/UserStorage';
+import WalletStorage from '../../../../storage/mongodb/WalletStorage';
+import WalletValidatorRest from '../validator/WalletValidatorRest';
 import axios from 'axios';
+
 const MODULE_NAME = 'WalletService';
 
 
 export default class WalletService {
 
   public static async handleWalletRecharge(action: ServerAction, req: Request, res: Response, next: NextFunction): Promise<void> {
-
     const filteredRequest = WalletValidatorRest.getInstance().validateWalletRechargeReq(req.query);
     const id = filteredRequest.userID as string;
     const amount = filteredRequest.amount as number;
@@ -37,16 +23,6 @@ export default class WalletService {
     const user = await UserStorage.getUser(req.tenant, id);
     void WalletStorage.updateNewTransaction(req.tenant, orderId, user.mobile , amount, 'INITIATED');
 
-    // if (rechargeAmount <= 0) {
-    //   throw new AppError({
-    //     errorCode: HTTPError.INVALID_CAPTCHA,
-    //     message: 'Recharge amount must be greater than zero',
-    //     user: req.user,
-    //     module: MODULE_NAME,
-    //     method: 'handleWalletRecharge'
-    //   });
-    //
-    // }
     try {
       const options = {
         method: 'post',
@@ -198,6 +174,62 @@ export default class WalletService {
     next();
   }
 
+  public static async handleWalletWithdraw(action: ServerAction, req: Request, res: Response, next: NextFunction): Promise<void> {
+    // Check if component is active
+    // UtilsService.assertComponentIsActiveFromToken(req.user, TenantComponents.WALLET,
+    //   Action.CREATE, Entity.WALLET, MODULE_NAME, 'handleWalletRecharge');
+    // Filter
+    // const filteredRequest = WalletValidatorRest.getInstance().validateWalletRechargeReq(req.body);
+    const filteredRequest = req.body;
+    // Check auth
+    // await AuthorizationService.checkAndGetWalletAuthorizations(
+    //   req.tenant, req.user, Action.CREATE);
+    // Perform the wallet recharge
+    const rechargeAmount = filteredRequest.amount;
+    if (rechargeAmount <= 0) {
+      throw new AppError({
+        errorCode: HTTPError.INVALID_CAPTCHA,
+        message: 'Recharge amount must be greater than zero',
+        user: req.user,
+        module: MODULE_NAME,
+        method: 'handleWalletWithdraw'
+      });
+    }
+    // Simulate recharge process
+    console.log(filteredRequest.mobile, rechargeAmount);
+    const walletBalance = await WalletStorage.updateWalletBalanceWithdraw(req.tenant, filteredRequest.mobile, rechargeAmount);
+    // Log the recharge action
+    await Logging.logInfo({
+      tenantID: req.tenant.id,
+      user: req.user,
+      module: MODULE_NAME,
+      method: 'handleWalletWithdraw',
+      message: `Wallet recharge of ${rechargeAmount} units successful`,
+      action: action,
+      detailedMessages: { rechargeAmount }
+    });
+    res.json({ balance: walletBalance });
+    next();
+  }
+
+  public static async handleGetWalletTransactions(action: ServerAction, req: Request, res: Response, next: NextFunction): Promise<void> {
+
+    const filteredRequest = WalletValidatorRest.getInstance().validateWalletTransaction(req.query);
+    const transactions = await WalletStorage.getTransactionsByUserId(req.tenant, filteredRequest.userID, filteredRequest.startDate, filteredRequest.endDate);
+    await Logging.logInfo({
+      tenantID: req.tenant.id,
+      user: req.user,
+      module: MODULE_NAME,
+      method: 'handleGetWalletTransactions',
+      message: 'Get Wallet transactions successful',
+      action: action,
+    });
+    // Respond with transactions
+    // console.log(transactions,'TRANSACTIONS');
+    res.json(transactions);
+    next();
+  }
+
   // public static async handleWalletRecharge(action: ServerAction, req: Request, res: Response, next: NextFunction): Promise<void> {
   //   // Check if component is active
   //   // UtilsService.assertComponentIsActiveFromToken(req.user, TenantComponents.WALLET,
@@ -235,60 +267,4 @@ export default class WalletService {
   //   res.json({ balance: walletBalance });
   //   next();
   // }
-
-  public static async handleWalletWithdraw(action: ServerAction, req: Request, res: Response, next: NextFunction): Promise<void> {
-    // Check if component is active
-    // UtilsService.assertComponentIsActiveFromToken(req.user, TenantComponents.WALLET,
-    //   Action.CREATE, Entity.WALLET, MODULE_NAME, 'handleWalletRecharge');
-    // Filter
-    // const filteredRequest = WalletValidatorRest.getInstance().validateWalletRechargeReq(req.body);
-    const filteredRequest = req.body;
-    // Check auth
-    // await AuthorizationService.checkAndGetWalletAuthorizations(
-    //   req.tenant, req.user, Action.CREATE);
-    // Perform the wallet recharge
-    const rechargeAmount = filteredRequest.amount;
-    if (rechargeAmount <= 0) {
-      throw new AppError({
-        errorCode: HTTPError.INVALID_CAPTCHA,
-        message: 'Recharge amount must be greater than zero',
-        user: req.user,
-        module: MODULE_NAME,
-        method: 'handleWalletRecharge'
-      });
-    }
-    // Simulate recharge process
-    console.log(filteredRequest.mobile, rechargeAmount);
-    const walletBalance = await WalletStorage.updateWalletBalanceWithdraw(req.tenant, filteredRequest.mobile, rechargeAmount);
-    // Log the recharge action
-    await Logging.logInfo({
-      tenantID: req.tenant.id,
-      user: req.user,
-      module: MODULE_NAME,
-      method: 'handleWalletRecharge',
-      message: `Wallet recharge of ${rechargeAmount} units successful`,
-      action: action,
-      detailedMessages: { rechargeAmount }
-    });
-    res.json({ balance: walletBalance });
-    next();
-  }
-
-  public static async handleGetWalletTransactions(action: ServerAction, req: Request, res: Response, next: NextFunction): Promise<void> {
-
-    const filteredRequest = WalletValidatorRest.getInstance().validateWalletTransaction(req.query);
-    const transactions = await WalletStorage.getTransactionsByUserId(req.tenant, filteredRequest.userID, filteredRequest.startDate, filteredRequest.endDate);
-    await Logging.logInfo({
-      tenantID: req.tenant.id,
-      user: req.user,
-      module: MODULE_NAME,
-      method: 'handleGetWalletTransactions',
-      message: 'Get Wallet transactions successful',
-      action: action,
-    });
-    // Respond with transactions
-    // console.log(transactions,'TRANSACTIONS');
-    res.json(transactions);
-    next();
-  }
 }

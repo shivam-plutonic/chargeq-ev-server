@@ -191,7 +191,7 @@ export default class WalletStorage {
     let adjustedAmount = Amount / (1 + gstRate);
     adjustedAmount = Math.round(adjustedAmount);
     user.wallet.amount -= Amount;
-    if (Amount !== null){
+    if (Amount) {
       await global.database.getCollection<any>(tenant.id, 'users').findOneAndUpdate(
         { '_id': DatabaseUtils.convertToObjectID(user.id) },
         { $set: { 'wallet.amount': user.wallet.amount } }
